@@ -42,7 +42,7 @@ def trim_edge_zeros(arr):
 
 
 def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
-                    png_cmap):
+                    png_cmap,nslices=6):
     """
     Creates static figures that highlight certain aspects of tedana processing
     This includes a figure for each component showing the component time course,
@@ -89,7 +89,7 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
     tr = ref_img.header.get_zooms()[-1]
 
     # Create indices for 6 cuts, based on dimensions
-    cuts = [ts_B.shape[dim] // 6 for dim in range(3)]
+    cuts = [ts_B.shape[dim] // nslices for dim in range(3)]
     expl_text = ''
 
     # Remove trailing ';' from rationale column
@@ -110,9 +110,9 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
             line_color = '0.75'
             expl_text = 'other classification'
 
-        allplot = plt.figure(figsize=(10, 9))
-        ax_ts = plt.subplot2grid((5, 6), (0, 0),
-                                 rowspan=1, colspan=6,
+        allplot = plt.figure(figsize=(10, (nslices+2))
+        ax_ts = plt.subplot2grid((5, nslices), (0, 0),
+                                 rowspan=1, colspan=nslices,
                                  fig=allplot)
 
         ax_ts.set_xlabel('TRs')
@@ -153,8 +153,8 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
         imgmin = imgmax * -1
 
         for idx, cut in enumerate(cuts):
-            for imgslice in range(1, 6):
-                ax = plt.subplot2grid((5, 6), (idx + 1, imgslice - 1), rowspan=1, colspan=1)
+            for imgslice in range(1, nslices):
+                ax = plt.subplot2grid((5, nslices), (idx + 1, imgslice - 1), rowspan=1, colspan=1)
                 ax.axis('off')
 
                 if idx == 0:
@@ -178,7 +178,7 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
         spectrum, freqs = get_spectrum(mmix[:, compnum], tr)
 
         # Plot it
-        ax_fft = plt.subplot2grid((5, 6), (4, 0), rowspan=1, colspan=6)
+        ax_fft = plt.subplot2grid((5, nslices), (4, 0), rowspan=1, colspan=nslices)
         ax_fft.plot(freqs, spectrum)
         ax_fft.set_title('One Sided fft')
         ax_fft.set_xlabel('Hz')

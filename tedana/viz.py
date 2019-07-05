@@ -88,7 +88,7 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
     # Get repetition time from ref_img
     tr = ref_img.header.get_zooms()[-1]
 
-    # Create indices for 6 cuts, based on dimensions
+    # Create indices for nslices cuts, based on dimensions
     cuts = [ts_B.shape[dim] // nslices for dim in range(3)]
     expl_text = ''
 
@@ -110,7 +110,7 @@ def write_comp_figs(ts, mask, comptable, mmix, ref_img, out_dir,
             line_color = '0.75'
             expl_text = 'other classification'
 
-        allplot = plt.figure(figsize=(10, (nslices+2))
+        allplot = plt.figure(figsize=(10, (nslices+3)))
         ax_ts = plt.subplot2grid((5, nslices), (0, 0),
                                  rowspan=1, colspan=nslices,
                                  fig=allplot)

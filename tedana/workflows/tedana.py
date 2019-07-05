@@ -187,7 +187,7 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
                     tedort=False, gscontrol=None, tedpca='mle',
                     source_tes=-1, combmode='t2s', verbose=False, stabilize=False,
                     out_dir='.', fixed_seed=42, maxit=500, maxrestart=10,
-                    debug=False, quiet=False, png=False, png_cmap='coolwarm'):
+                    debug=False, quiet=False, png=False, png_cmap='coolwarm',nslices=6):
     """
     Run the "canonical" TE-Dependent ANAlysis workflow.
 
@@ -228,11 +228,13 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
         Combination scheme for TEs: 't2s' (Posse 1999, default).
     verbose : :obj:`bool`, optional
         Generate intermediate and additional files. Default is False.
-    png : obj:'bool', optional
+    png : :obj:'bool', optional
         Generate simple plots and figures. Default is false.
-    png_cmap : obj:'str', optional
-            Name of a matplotlib colormap to be used when generating figures.
-            --png must still be used to request figures. Default is 'coolwarm'
+    png_cmap : :obj:'str', optional
+        Name of a matplotlib colormap to be used when generating figures.
+        --png must still be used to request figures. Default is 'coolwarm'
+    nslices : :obj:`int`, optional
+        Number of slices to visualise in the figures + 1. Default is 6
     out_dir : :obj:`str`, optional
         Output directory.
 
@@ -478,7 +480,7 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
         viz.write_comp_figs(data_oc, mask=mask, comptable=comptable,
                             mmix=mmix_orig, ref_img=ref_img,
                             out_dir=op.join(out_dir, 'figures'),
-                            png_cmap=png_cmap)
+                            png_cmap=png_cmap,nslices=nslices)
 
         LGR.info('Making Kappa vs Rho scatter plot')
         viz.write_kappa_scatter(comptable=comptable,

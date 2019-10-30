@@ -1,4 +1,3 @@
-__meica_mix.1D
 adaptive_mask.nii
 betas_OC.nii
 betas_hik_OC.nii
@@ -41,6 +40,5 @@ s0vs.nii
 t2ss.nii
 t2sv.nii
 t2svG.nii
-tedana_run.txt
 ts_OC.nii
 ts_OC_whitened.nii

@@ -14,7 +14,7 @@ multi-echo functional magnetic resonance imaging (fMRI) data.
 [![Codecov](https://codecov.io/gh/me-ica/tedana/branch/master/graph/badge.svg)](https://codecov.io/gh/me-ica/tedana)
 [![Join the chat at https://gitter.im/ME-ICA/tedana](https://badges.gitter.im/ME-ICA/tedana.svg)](https://gitter.im/ME-ICA/tedana?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Join our tinyletter mailing list](https://img.shields.io/badge/receive-our%20newsletter%20❤%EF%B8%8F-blueviolet.svg)](https://tinyletter.com/tedana-devs)
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
 
 
 ## About
@@ -33,7 +33,7 @@ More information and documentation can be found at https://tedana.readthedocs.io
 You'll need to set up a working development environment to use `tedana`.
 To set up a local environment, you will need Python >=3.5 and the following packages will need to be installed:
 
-* [numpy](http://www.numpy.org/)
+* [numpy>=1.14](http://www.numpy.org/)
 * [scipy](https://www.scipy.org/)
 * [scikit-learn](http://scikit-learn.org/stable/)
 * [nilearn](https://nilearn.github.io/)
@@ -111,10 +111,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://tsalo.github.io"><img src="https://avatars3.githubusercontent.com/u/8228902?v=4" width="100px;" alt="Taylor Salo"/><br /><sub><b>Taylor Salo</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=tsalo" title="Code">💻</a> <a href="#ideas-tsalo" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ME-ICA/tedana/commits?author=tsalo" title="Documentation">📖</a> <a href="#tutorial-tsalo" title="Tutorials">✅</a> <a href="#question-tsalo" title="Answering Questions">💬</a> <a href="https://github.com/ME-ICA/tedana/issues?q=author%3Atsalo" title="Bug reports">🐛</a> <a href="https://github.com/ME-ICA/tedana/commits?author=tsalo" title="Tests">⚠️</a> <a href="#review-tsalo" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://github.com/jbteves"><img src="https://avatars3.githubusercontent.com/u/26722533?v=4" width="100px;" alt="Joshua Teves"/><br /><sub><b>Joshua Teves</b></sub></a><br /><a href="#projectManagement-jbteves" title="Project Management">📆</a> <a href="https://github.com/ME-ICA/tedana/commits?author=jbteves" title="Documentation">📖</a> <a href="#review-jbteves" title="Reviewed Pull Requests">👀</a> <a href="#maintenance-jbteves" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://whitakerlab.github.io"><img src="https://avatars1.githubusercontent.com/u/3626306?v=4" width="100px;" alt="Kirstie Whitaker"/><br /><sub><b>Kirstie Whitaker</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=KirstieJane" title="Documentation">📖</a> <a href="#projectManagement-KirstieJane" title="Project Management">📆</a> <a href="#review-KirstieJane" title="Reviewed Pull Requests">👀</a> <a href="#talk-KirstieJane" title="Talks">📢</a></td>
-    <td align="center"><a href="https://github.com/monicayao"><img src="https://avatars1.githubusercontent.com/u/35382166?v=4" width="100px;" alt="Monica Yao"/><br /><sub><b>Monica Yao</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=monicayao" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/monicayao"><img src="https://avatars1.githubusercontent.com/u/35382166?v=4" width="100px;" alt="Monica Yao"/><br /><sub><b>Monica Yao</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=monicayao" title="Documentation">📖</a> <a href="https://github.com/ME-ICA/tedana/commits?author=monicayao" title="Tests">⚠️</a></td>
   </tr>
   <tr>
     <td align="center"><a href="http://www.fmrwhy.com/"><img src="https://avatars0.githubusercontent.com/u/10141237?v=4" width="100px;" alt="Stephan Heunis"/><br /><sub><b>Stephan Heunis</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=jsheunis" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/benoit-beranger/"><img src="https://avatars0.githubusercontent.com/u/16976839?v=4" width="100px;" alt="Benoît Béranger"/><br /><sub><b>Benoît Béranger</b></sub></a><br /><a href="https://github.com/ME-ICA/tedana/commits?author=benoitberanger" title="Code">💻</a></td>
   </tr>
 </table>
 

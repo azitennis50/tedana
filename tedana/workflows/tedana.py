@@ -13,6 +13,7 @@ import shutil
 import logging
 import os.path as op
 from glob import glob
+import datetime
 
 import argparse
 import numpy as np
@@ -176,10 +177,23 @@ def _get_parser():
                                 'use of IncrementalPCA. May increase workflow '
                                 'duration.'),
                           default=False)
+    optional.add_argument('--fittype',
+                          dest='fittype',
+                          action='store',
+                          choices=['loglin', 'curvefit'],
+                          help='Desired Fitting Method '
+                               '"loglin" means that a linear model is fit '
+                               'to the log of the data, default '
+                               '"curvefit" means that a more computationally '
+                               'demanding monoexponential model is fit '
+                               'to the raw data',
+                          default='loglin')
     optional.add_argument('--debug',
                           dest='debug',
-                          help=argparse.SUPPRESS,
                           action='store_true',
+                          help=('Logs in the terminal will have increased '
+                                'verbosity, and will also be written into '
+                                'a .txt file in the output directory.'),
                           default=False)
     optional.add_argument('--quiet',
                           dest='quiet',
@@ -195,7 +209,7 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
                     source_tes=-1, combmode='t2s', verbose=False, stabilize=False,
                     out_dir='.', fixed_seed=42, maxit=500, maxrestart=10,
                     debug=False, quiet=False, png=False, png_cmap='coolwarm',
-                    low_mem=False):
+                    low_mem=False, fittype='loglin'):
     """
     Run the "canonical" TE-Dependent ANAlysis workflow.
 
@@ -234,6 +248,12 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
         Default is -1.
     combmode : {'t2s'}, optional
         Combination scheme for TEs: 't2s' (Posse 1999, default).
+    fittype : {'loglin', 'curvefit'}, optional
+        Monoexponential fitting method.
+        'loglin' means to use the the default linear fit to the log of
+        the data.
+        'curvefit' means to use a monoexponential fit to the raw data,
+        which is slightly slower but may be more accurate.
     verbose : :obj:`bool`, optional
         Generate intermediate and additional files. Default is False.
     png : obj:'bool', optional
@@ -288,33 +308,30 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
         newname = previousparts[0] + '_old' + previousparts[1]
         os.rename(f, newname)
 
-    if debug and not quiet:
-        # ensure old logs aren't over-written
-        basename = 'tedana_run'
-        extension = 'txt'
-        logname = op.join(out_dir, (basename + '.' + extension))
-        logex = op.join(out_dir, (basename + '*'))
-        previouslogs = glob(logex)
-        previouslogs.sort(reverse=True)
-        for f in previouslogs:
-            previousparts = op.splitext(f)
-            newname = previousparts[0] + '_old' + previousparts[1]
-            os.rename(f, newname)
+    # create logfile name
+    basename = 'tedana_'
+    extension = 'txt'
+    isotime = datetime.datetime.now().replace(microsecond=0).isoformat()
+    logname = op.join(out_dir, (basename + isotime + '.' + extension))
 
-        # set logging format
-        formatter = logging.Formatter(
-                    '%(asctime)s\t%(name)-12s\t%(levelname)-8s\t%(message)s',
-                    datefmt='%Y-%m-%dT%H:%M:%S')
+    # set logging format
+    formatter = logging.Formatter(
+                '%(asctime)s\t%(name)-12s\t%(levelname)-8s\t%(message)s',
+                datefmt='%Y-%m-%dT%H:%M:%S')
 
-        # set up logging file and open it for writing
-        fh = logging.FileHandler(logname)
-        fh.setFormatter(formatter)
+    # set up logging file and open it for writing
+    fh = logging.FileHandler(logname)
+    fh.setFormatter(formatter)
+
+    if quiet:
+        logging.basicConfig(level=logging.WARNING,
+                            handlers=[fh, logging.StreamHandler()])
+    elif debug:
         logging.basicConfig(level=logging.DEBUG,
                             handlers=[fh, logging.StreamHandler()])
-    elif quiet:
-        logging.basicConfig(level=logging.WARNING)
     else:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO,
+                            handlers=[fh, logging.StreamHandler()])
 
     LGR.info('Using output directory: {}'.format(out_dir))
 
@@ -399,7 +416,7 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
     os.chdir(out_dir)
 
     LGR.info('Computing T2* map')
-    t2s, s0, t2ss, s0s, t2sG, s0G = decay.fit_decay(catd, tes, mask, masksum)
+    t2s, s0, t2ss, s0s, t2sG, s0G = decay.fit_decay(catd, tes, mask, masksum, fittype)
     bp_str += (" A monoexponential model was fit to the data at each voxel "
                "using log-linear regression in order to estimate T2* and S0 "
                "maps. For each voxel, the value from the adaptive mask was "
@@ -492,7 +509,6 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
                    "decompose the dimensionally reduced dataset.")
 
         if verbose:
-            np.savetxt(op.join(out_dir, '__meica_mix.1D'), mmix_orig)
             if source_tes == -1:
                 io.filewrite(utils.unmask(dd, mask),
                              op.join(out_dir, 'ts_OC_whitened.nii'), ref_img)

@@ -58,7 +58,7 @@ It uses timeseries that are known to be noise or signal of interest, and it comp
 `Normalised Cross Correlation`_ between them and the IC signals, to automatically reject or accept
 components.
 It overwrites the original comp_table_ica.txt, adding specific rationale labels (I098 and I099).
-Check out the documentation: :py:func:`tedana.workflows.check_task_corr`.
+For more details, please check out the documentation: :py:func:`tedana.workflows.check_task_corr`.
 
 .. argparse::
    :ref: tedana.workflows.post_taskcorr._get_parser

@@ -1,7 +1,7 @@
 """
 Quick hack for tedana, from HBM Hackathon 2019.
 TODO:
-- let user decide wether they want NCC or simple correlation.
+- let user decide whether they want NCC or simple correlation.
 - Better threshold.
 
 """

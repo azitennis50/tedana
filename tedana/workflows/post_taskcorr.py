@@ -210,7 +210,7 @@ def modify_comp_table(ctab_fullpath, selcomp, flag='accepted'):
         comptable.loc[selcomp, 'rationale'] = 'I098'
 
     LGR.info('Overwriting original component table.')
-    shutil.copy(ctab_fullpath, ctab_fullpath + '.bck')
+    shutil.copy(ctab_fullpath, ctab_fullpath + '.bak')
     comptable.to_csv(ctab_fullpath, sep='\t', index_label='component')
 
 

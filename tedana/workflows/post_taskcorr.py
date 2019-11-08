@@ -249,7 +249,7 @@ def check_task_corr(mixmat, ctab_fullpath, ts, thr=0.6, flag='accepted'):
 
 def _main(argv=None):
     options = _get_parser().parse_args(argv)
-    ctab_fullpath = op.join(options.tedana_dir, 'comp_table_ica.txt')
+    ctab_fullpath = op.join(options.tedana_dir, 'comp_table_ica.tsv')
     mixm_fullpath = op.join(options.tedana_dir, 'meica_mix.1D')
 
     mixmat = import_file(mixm_fullpath)

@@ -150,7 +150,30 @@ jobs:
       - store_artifacts:
           path: /tmp/data
       - persist_to_workspace:
+          root: /tmp  five-echo:
+    docker:
+      - image: continuumio/miniconda3
+    working_directory: /tmp/src/tedana
+    steps:
+      - checkout
+      - restore_cache:
+          key: conda-py37-v1-{{ checksum "dev_requirements.txt" }}
+      - run:
+          name: Run integration tests
+          no_output_timeout: 40m
+          command: |
+            apt-get install -yqq make
+            source activate tedana_py37  # depends on makeenv_37
+            make five-echo
+            mkdir /tmp/src/coverage
+            mv /tmp/src/tedana/.coverage /tmp/src/coverage/.coverage.five-echo
+      - store_artifacts:
+          path: /tmp/data
+      - persist_to_workspace:
           root: /tmp
+          paths:
+              - src/coverage/.coverage.five-echo
+              - data/five-echo/TED.five-echo
           paths:
               - src/coverage/.coverage.three-echo
   five-echo:
@@ -176,7 +199,32 @@ jobs:
           root: /tmp
           paths:
               - src/coverage/.coverage.five-echo
-
+              - data/five-echo/TED.five-echo
+  five-echo-post-taskcorr:
+    docker:
+      - image: continuumio/miniconda3
+    working_directory: /tmp/src/tedana
+    steps:
+      - checkout
+      - restore_cache:
+          key: conda-py37-v1-{{ checksum "dev_requirements.txt" }}
+      - attach_workspace:
+          at: /tmp/data/five-echo
+      - run:
+          name: Run post-taskcorr
+          no_output_timeout: 40m
+          command: |
+            apt-get install -yqq make
+            source activate tedana_py37  # depends on makeenv_37
+            make five-echo-post-taskcorr
+            mkdir /tmp/src/coverage
+            mv /tmp/src/tedana/.coverage /tmp/src/coverage/.coverage.post-taskcorr
+      - store_artifacts:
+          path: /tmp/data
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+              - src/coverage/.coverage.post-taskcorr
   merge_coverage:
     working_directory: /tmp/src/tedana
     docker:
@@ -219,6 +267,9 @@ workflows:
       - five-echo:
           requires:
             - makeenv_37
+      - five-echo-post-taskcorr:
+          requires:
+            - five-echo
       - merge_coverage:
           requires:
             - unittest_35
@@ -226,3 +277,4 @@ workflows:
             - unittest_37
             - three-echo
             - five-echo
+            - five-echo-post-taskcorr

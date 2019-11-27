@@ -22,3 +22,5 @@ three-echo:
 five-echo:
 	@py.test --cov-append --cov-report term-missing --cov=tedana -k test_integration_five_echo tedana/tests/test_integration.py
 
+five-echo-post-taskcorr:
+	@py.test --cov-append --cov-report term-missing --cov=tedana tedana/tests/test_post-taskcorr.py

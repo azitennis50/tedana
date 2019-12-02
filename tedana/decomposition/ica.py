@@ -76,4 +76,5 @@ def tedica(data, n_components, fixed_seed, maxit=500, maxrestart=10):
 
     mmix = ica.mixing_
     mmix = stats.zscore(mmix, axis=0)
-    return mmix
+    components = ica.components_
+    return mmix, components

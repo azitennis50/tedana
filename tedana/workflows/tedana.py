@@ -475,12 +475,14 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
                                                 out_dir=out_dir,
                                                 verbose=verbose,
                                                 low_mem=low_mem)
-        mmix_orig = decomposition.tedica(dd, n_components, fixed_seed,
+        mmix_orig, components_orig = decomposition.tedica(dd, n_components, fixed_seed,
                                          maxit, maxrestart)
 
         if verbose and (source_tes == -1):
             io.filewrite(utils.unmask(dd, mask),
                          op.join(out_dir, 'ts_OC_whitened.nii'), ref_img)
+            io.filewrite(utils.unmask(components_orig, mask),
+                         op.join(out_dir, 'ica_components_orig.nii'), ref_img)
 
         LGR.info('Making second component selection guess from ICA results')
         # Estimate betas and compute selection metrics for mixing matrix

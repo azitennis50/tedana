@@ -40,6 +40,10 @@ multi-echo functional magnetic resonance imaging (fMRI) data.
    :target: https://gitter.im/ME-ICA/tedana
    :alt: Join the chat
 
+.. image:: https://img.shields.io/badge/receive-our%20newsletter%20❤%EF%B8%8F-blueviolet.svg
+   :target: https://tinyletter.com/tedana-devs
+   :alt: Join our tinyletter mailing list
+
 About
 -----
 
@@ -51,10 +55,10 @@ The ME-ICA pipeline originally performed both pre-processing and TE-dependent
 analysis of multi-echo fMRI data; however, ``tedana`` now assumes that you're
 working with data which has been previously preprocessed.
 
-For a summary of multi-echo fMRI, which is the imaging technique ``tedana`` builds on, 
-visit `Multi-echo fMRI`_. 
+For a summary of multi-echo fMRI, which is the imaging technique ``tedana`` builds on,
+visit `Multi-echo fMRI`_.
 
-For a detailed procedure of how ``tedana`` analyzes the data from multi-echo fMRI, 
+For a detailed procedure of how ``tedana`` analyzes the data from multi-echo fMRI,
 visit `Processing pipeline details`_.
 
 .. _ME-ICA: https://github.com/me-ica/me-ica
@@ -125,7 +129,9 @@ You can also learn more about `why citing software is important`_.
 Posters
 -------
 
-.. image:: /_static/tedana-poster.png
+.. image:: /_static/tedana-ohbm2019-poster.png
+
+.. image:: /_static/tedana-ohbm2018-poster.png
 
 License Information
 -------------------
@@ -135,12 +141,16 @@ tedana is licensed under GNU Lesser General Public License version 2.1.
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
    installation
    multi-echo
+   considerations
+   publications
    usage
    approach
    outputs
+   faq
+   support
    contributing
    roadmap
    api

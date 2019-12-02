@@ -12,6 +12,8 @@ from sklearn.utils import check_array
 from tedana.due import due, BibTeX
 
 LGR = logging.getLogger(__name__)
+RepLGR = logging.getLogger('REPORT')
+RefLGR = logging.getLogger('REFERENCES')
 
 
 def load_image(data):
@@ -63,6 +65,9 @@ def make_adaptive_mask(data, mask=None, getsum=False):
         Valued array indicating the number of echos with sufficient signal in a
         given voxel. Only returned if `getsum = True`
     """
+    RepLGR.info("An adaptive mask was then generated, in which each voxel's "
+                "value reflects the number of echoes with 'good' data.")
+
     # take temporal mean of echos and extract non-zero values in first echo
     echo_means = data.mean(axis=-1)  # temporal mean of echos
     first_echo = echo_means[echo_means[:, 0] != 0, 0]
@@ -264,7 +269,10 @@ def threshold_map(img, min_cluster_size, threshold=None, mask=None,
         mask = mask.astype(bool)
         arr *= mask.reshape(arr.shape)
 
-    clust_thresholded = np.zeros(arr.shape, int)
+    if binarize:
+        clust_thresholded = np.zeros(arr.shape, bool)
+    else:
+        clust_thresholded = np.zeros(arr.shape, int)
 
     if sided == 'two':
         test_arr = np.abs(arr)
@@ -286,7 +294,7 @@ def threshold_map(img, min_cluster_size, threshold=None, mask=None,
     for i_clust in clust_sizes.keys():
         if np.all(thresh_arr[labeled == i_clust] == 1):
             if binarize:
-                clust_thresholded[labeled == i_clust] = 1
+                clust_thresholded[labeled == i_clust] = True
             else:
                 clust_thresholded[labeled == i_clust] = arr[labeled == i_clust]
 
@@ -304,7 +312,7 @@ def threshold_map(img, min_cluster_size, threshold=None, mask=None,
         for i_clust in clust_sizes.keys():
             if np.all(thresh_arr[labeled == i_clust] == 1):
                 if binarize:
-                    clust_thresholded[labeled == i_clust] = 1
+                    clust_thresholded[labeled == i_clust] = True
                 else:
                     clust_thresholded[labeled == i_clust] = arr[labeled == i_clust]
 

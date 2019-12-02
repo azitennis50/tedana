@@ -1,8 +1,12 @@
 """
-Quick hack for tedana, from HBM Hackathon 2019.
+This script updates tedana's classification based on user supplied
+timeseries to be accepted or rejected.
+
+
 TODO:
 - let user decide wether they want NCC or simple correlation.
-- Better threshold.
+- Better threshold: data-driven thr or tested minimal thr instead of 0.6
+                    or percentage based (best x out of y)
 
 """
 
@@ -10,6 +14,7 @@ import logging
 
 import sys
 import argparse
+import shutil
 
 import numpy as np
 import pandas as pd
@@ -37,15 +42,15 @@ def _get_parser():
     # https://stackoverflow.com/a/43456577
     optional = parser._action_groups.pop()
     required = parser.add_argument_group('required arguments')
-    required.add_argument('-td', '--ted-dir',
+    required.add_argument('-d', '--dir',
                           dest='tedana_dir',
                           type=str,
                           help=('Output directory of tedana, i.e. where '
                                 'the mixing matrix and the component'
                                 'table are located.'),
                           required=True)
-    optional.add_argument('-gts', '--good_ts',
-                          dest='good_ts',
+    optional.add_argument('-ac', '--acc_corr',
+                          dest='acc_corr',
                           metavar='FILE',
                           type=lambda x: is_valid_file(parser, x),
                           help=('File containing timeseries that should'
@@ -53,8 +58,8 @@ def _get_parser():
                                 'matrix, where columns are the timeseries.'
                                 'Specify with full path.'),
                           default=None)
-    optional.add_argument('-bts', '--bad_ts',
-                          dest='bad_ts',
+    optional.add_argument('-rc', '--rej_corr',
+                          dest='rej_corr',
                           metavar='FILE',
                           type=lambda x: is_valid_file(parser, x),
                           help=('File containing timeseries that should'
@@ -179,7 +184,7 @@ def modify_comp_table(ctab_fullpath, selcomp, flag='accepted'):
     ----------
     ctab_fullpath: string
         Full path to components table as of tedana output.
-        !!! It will be overwritten !!!
+        !!! It will be overwritten (but also saved as a .bck) !!!
     selcomp: list
         List of indexes of components to be flagged with flag.
     flag: string, Optional
@@ -205,12 +210,33 @@ def modify_comp_table(ctab_fullpath, selcomp, flag='accepted'):
         comptable.loc[selcomp, 'rationale'] = 'I098'
 
     LGR.info('Overwriting original component table.')
+    shutil.copy(ctab_fullpath, ctab_fullpath + '.bak')
     comptable.to_csv(ctab_fullpath, sep='\t', index_label='component')
 
 
-def check_task_corr(mixmat, ctab_fullpath, ts, thr, flag='accepted'):
+def check_task_corr(mixmat, ctab_fullpath, ts, thr=0.6, flag='accepted'):
     """
     This function is the workflow of the component selection.
+
+    Parameters
+    ----------
+    mixmat: T x N :obj:`numpy.array`
+        Timeseries of MEICA components.
+    ctab_fullpath: :obj:`string`
+        Full path to components table as of tedana output.
+        !!! It will be overwritten !!!
+    ts: T x N :obj:`numpy.array`
+        Timeseries to compare components to.
+    thr: :obj:`float`, Optional
+        Threshold for NCC value considered significant. Default = 0.6.
+    flag: :obj:`string`, Optional
+        Flag to change the label of the components with index
+        selcomp, in the components table. Default = 'accepted'
+
+    Note
+    ----
+    The file output is the same ctab_fullpath
+
     """
     norm_ts = import_file(ts)
     checked_ts = check_dimensionality(norm_ts, mixmat)
@@ -228,11 +254,13 @@ def _main(argv=None):
 
     mixmat = import_file(mixm_fullpath)
 
-    if options.bad_ts is not None:
-        check_task_corr(mixmat, ctab_fullpath, options.bad_ts, options.thr, flag='rejected')
+    if options.rej_corr is not None:
+        check_task_corr(mixmat, ctab_fullpath, options.rej_corr, options.thr,
+                        flag='rejected')
 
-    if options.good_ts is not None:
-        check_task_corr(mixmat, ctab_fullpath, options.good_ts, options.thr, flag='accepted')
+    if options.acc_corr is not None:
+        check_task_corr(mixmat, ctab_fullpath, options.acc_corr, options.thr,
+                        flag='accepted')
 
 
 if __name__ == '__main__':

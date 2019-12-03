@@ -1,8 +1,8 @@
 """
 Run the "canonical" TE-Dependent ANAlysis workflow.
 """
+import pdb
 import os
-
 os.environ['MKL_NUM_THREADS'] = '1'
 os.environ['NUMEXPR_NUM_THREADS'] = '1'
 os.environ['OMP_NUM_THREADS'] = '1'
@@ -475,14 +475,22 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
                                                 out_dir=out_dir,
                                                 verbose=verbose,
                                                 low_mem=low_mem)
-        mmix_orig, components_orig = decomposition.tedica(dd, n_components, fixed_seed,
-                                         maxit, maxrestart)
+        mmix_orig, components_orig = decomposition.tedica(dd, n_components,
+                                                          fixed_seed, maxit,
+                                                          maxrestart)
 
         if verbose and (source_tes == -1):
             io.filewrite(utils.unmask(dd, mask),
                          op.join(out_dir, 'ts_OC_whitened.nii'), ref_img)
             io.filewrite(utils.unmask(components_orig, mask),
                          op.join(out_dir, 'ica_components_orig.nii'), ref_img)
+
+        # #!# MODS for 4D denoising
+        io.filewrite(utils.unmask(components_orig, mask),
+                     op.join(out_dir, 'ica_components_orig.nii'), ref_img)
+        mixing_df = pd.DataFrame(data=mmix_orig)
+        mixing_df.to_csv('ica_mixing_orig.tsv', sep='\t', index=False, header=False)
+        mmix_orig = stats.zscore(mmix_orig, axis=0)
 
         LGR.info('Making second component selection guess from ICA results')
         # Estimate betas and compute selection metrics for mixing matrix

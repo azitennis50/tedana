@@ -482,10 +482,10 @@ def tedana_workflow(data, tes, mask=None, mixm=None, ctab=None, manacc=None,
         if verbose and (source_tes == -1):
             io.filewrite(utils.unmask(dd, mask),
                          op.join(out_dir, 'ts_OC_whitened.nii'), ref_img)
-            io.filewrite(utils.unmask(components_orig, mask),
-                         op.join(out_dir, 'ica_components_orig.nii'), ref_img)
 
         # #!# MODS for 4D denoising
+        io.filewrite(utils.unmask(dd, mask),
+                     op.join(out_dir, 'ts_OC_whitened.nii'), ref_img)
         io.filewrite(utils.unmask(components_orig, mask),
                      op.join(out_dir, 'ica_components_orig.nii'), ref_img)
         mixing_df = pd.DataFrame(data=mmix_orig)

@@ -1,3 +1,10 @@
+!!! Attention !!!
+=================
+This is a modified version of [`tedana`](https://github.com/ME-ICA/tedana), a great tool for Multi-Echo BOLD fMRI denoising.
+This version is used to process the data in the *EuskalIBUR dataset*.
+[`tedana`](https://github.com/ME-ICA/tedana) is © Copyright 2017-2019, [tedana developers](https://github.com/ME-ICA/tedana)
+
+
 # tedana: TE Dependent ANAlysis
 
 The ``tedana`` package is part of the ME-ICA pipeline, performing TE-dependent

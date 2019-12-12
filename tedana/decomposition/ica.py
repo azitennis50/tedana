@@ -60,7 +60,7 @@ def tedica(data, n_components, fixed_seed, maxit=500, maxrestart=10):
             # convergence failures.
             warnings.simplefilter('always')
 
-            ica.fit(data)
+            components = ica.fit_transform(data)
 
             w = list(filter(lambda i: issubclass(i.category, UserWarning), w))
             if len(w):
@@ -75,5 +75,5 @@ def tedica(data, n_components, fixed_seed, maxit=500, maxrestart=10):
                 break
 
     mmix = ica.mixing_
-    mmix = stats.zscore(mmix, axis=0)
-    return mmix
+    # mmix = stats.zscore(mmix, axis=0)
+    return mmix, components
